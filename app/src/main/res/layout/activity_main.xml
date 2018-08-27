@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@drawable/fondo">
+
+
+    <TextView
+        android:text="ENVÍO Y RECEPCIÓN DE INFORMACIÓN"
+        android:id="@+id/intent"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="#FFFF"
+        android:textSize="20dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="190dp"
+        android:gravity="center"/>
+
+    <Button
+        android:layout_marginTop="90dp"
+        android:id="@+id/sendZip"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:text="ENVIAR A OPERA" />
+
+    <Button
+        android:layout_marginTop="30dp"
+        android:id="@+id/received"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:onClick="recibir"
+        android:text="RECIBIR DE ENTREVISTADOR" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginRight="150dp"
+            android:layout_marginLeft="150dp"
+            android:text="CANCELAR"
+            android:onClick="cancel"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/cancel"/>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
