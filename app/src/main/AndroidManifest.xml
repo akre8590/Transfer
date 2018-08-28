@@ -33,7 +33,8 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".UsbDetected" />
+        <activity android:name=".UsbDetected">
+        </activity>
         <activity android:name=".UsbDetected2" />
         <activity android:name=".GeneratedPackage" />
         <activity android:name=".ReceivedPackage"></activity>

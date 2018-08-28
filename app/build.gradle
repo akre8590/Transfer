@@ -27,4 +27,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.github.ghost1372:Mzip-Android:0.4.0'
     implementation 'com.github.mjdev:libaums:0.5.5'
+    implementation 'com.github.onurkagan:ktoast:1.0.2'
 }

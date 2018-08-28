@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.github.mjdev.libaums.UsbMassStorageDevice;
 import com.github.mjdev.libaums.fs.FileSystem;
 import com.github.mjdev.libaums.fs.UsbFile;
 import com.github.mjdev.libaums.fs.UsbFileInputStream;
+import com.onurkaganaldemir.ktoastlib.KToast;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -93,6 +95,7 @@ public class UsbDetected2 extends AppCompatActivity {
         textInfo = (TextView) findViewById(R.id.info2);
     }
     public void detecte(){
+
         manager = (UsbManager) getSystemService(Context.USB_SERVICE);
         /*
          * this block required if you need to communicate to USB devices it's
@@ -114,11 +117,12 @@ public class UsbDetected2 extends AppCompatActivity {
                     + "DeviceID: " + device.getDeviceId() + "\n";
         }
         textInfo.setText(i);
-        if (textInfo.equals(" "))
-        {
-            sig2.setVisibility(View.INVISIBLE);
-        }else{
+        if(!textInfo.getText().toString().matches("")){
+            Toast.makeText(this, "Memoria detectada!!", Toast.LENGTH_SHORT).show();
             sig2.setVisibility(View.VISIBLE);
+        }else{
+            Toast.makeText(this, "Memoria no detectada...", Toast.LENGTH_SHORT).show();
+            sig2.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -146,7 +150,6 @@ public class UsbDetected2 extends AppCompatActivity {
             if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
                 Toast.makeText(context, "USB Detectado!!!", Toast.LENGTH_SHORT).show();
                 // Device attached
-
             }
         }
     };
@@ -160,13 +163,9 @@ public class UsbDetected2 extends AppCompatActivity {
         startActivity(intent);
     }
     public void copyFile3()  {
-
         File to = new File("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
-
         try {
-
             UsbMassStorageDevice[] devices = UsbMassStorageDevice.getMassStorageDevices(UsbDetected2.this);
-
             for (UsbMassStorageDevice device : devices) {
                 // before interacting with a device you need to call init()!
                 device.init();
@@ -176,37 +175,41 @@ public class UsbDetected2 extends AppCompatActivity {
                 //UsbFile file = root.createFile("opera.txt");
                 UsbFile file = root.search("datos_AdmCensal.zip");
 
+                if (file.getLength() > 0){
+                    InputStream is = new UsbFileInputStream(file);
+                    OutputStream out = new BufferedOutputStream(new FileOutputStream(to));
+                    byte[] bytes = new byte[currentFs.getChunkSize()];
+                    int count;
+                    long total = 0;
+
+                    while ((count = is.read(bytes)) != -1) {
+                        out.write(bytes, 0, count);
+                        total += count;
+                        Toast.makeText(this, "Copiando...", Toast.LENGTH_SHORT).show();
+
+                    }
+                    out.close();
+                    is.close();
+                    file.delete();
+                    ZipArchive zipArchive = new ZipArchive();
+                    zipArchive.unzip("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip","/storage/emulated/0/AdmCensal/recepciones/","123456");
+                    File fdelete2 = new File("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
+                    if (fdelete2.exists()) {
+                        if (fdelete2.delete()) {
+                            Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
+                        } else {
+                            Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
+                        }
+                    }
+                    Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(this, "No existe archivo en la memoria...", Toast.LENGTH_SHORT).show();
+                }
+
                 //UsbFile[] files = root.listFiles();
                 //for(UsbFile file: files) {
 
-                InputStream is = new UsbFileInputStream(file);
-                OutputStream out = new BufferedOutputStream(new FileOutputStream(to));
-                byte[] bytes = new byte[currentFs.getChunkSize()];
-                int count;
-                long total = 0;
-
-                while ((count = is.read(bytes)) != -1) {
-                    out.write(bytes, 0, count);
-                    total += count;
-                    Toast.makeText(this, "Copiando...", Toast.LENGTH_SHORT).show();
-
-                }
-                out.close();
-                is.close();
-                file.delete();
-                ZipArchive zipArchive = new ZipArchive();
-                zipArchive.unzip("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip","/storage/emulated/0/AdmCensal/recepciones/","123456");
-
-                File fdelete2 = new File("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
-                if (fdelete2.exists()) {
-                    if (fdelete2.delete()) {
-                        Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
-                    } else {
-                        Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
-                    }
-                }
-
-                Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
 
                 //}
 
@@ -229,6 +232,7 @@ public class UsbDetected2 extends AppCompatActivity {
                     Toast.makeText(this, "Copy file failed", Toast.LENGTH_SHORT).show();
                 }*/
             }
+
         } catch(FileNotFoundException e1){
             e1.printStackTrace();
             Toast.makeText(this, e1.getMessage(), Toast.LENGTH_SHORT).show();
@@ -255,6 +259,5 @@ public class UsbDetected2 extends AppCompatActivity {
             );
         }
     }
-
 
 }

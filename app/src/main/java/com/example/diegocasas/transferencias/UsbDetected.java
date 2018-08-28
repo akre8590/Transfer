@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.github.mjdev.libaums.fs.FileSystem;
 import com.github.mjdev.libaums.fs.UsbFile;
 import com.github.mjdev.libaums.fs.UsbFileOutputStream;
 import com.github.mjdev.libaums.fs.UsbFileStreamFactory;
+import com.onurkaganaldemir.ktoastlib.KToast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,8 +70,8 @@ public class UsbDetected extends AppCompatActivity {
         verifyStoragePermissions(UsbDetected.this);
 
         Intent intent = getIntent();
-        final String ruta_destino = intent.getExtras().getString("r_destino");
-        final String archivo_destino = intent.getExtras().getString("a_destino");
+         final String ruta_destino = intent.getExtras().getString("r_destino");
+         final String archivo_destino = intent.getExtras().getString("a_destino");
 
         det = (Button)findViewById(R.id.detected);
         sig = (Button)findViewById(R.id.next);
@@ -83,16 +85,18 @@ public class UsbDetected extends AppCompatActivity {
         sig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                siguiente1();
+                Intent i = new Intent(UsbDetected.this, GeneratedPackage.class);
+                i.putExtra("archivo_destino", archivo_destino);
+                startActivity(i);
+                //siguiente1();
                 copyFile2(ruta_destino, archivo_destino);
                 copyFile3();
             }
         });
-
         textInfo = (TextView) findViewById(R.id.info);
-
     }
     public void check(){
+
         manager = (UsbManager) getSystemService(Context.USB_SERVICE);
         /*
          * this block required if you need to communicate to USB devices it's
@@ -114,12 +118,16 @@ public class UsbDetected extends AppCompatActivity {
                     + "DeviceID: " + device.getDeviceId() + "\n";
         }
         textInfo.setText(i);
-        if (textInfo.equals(null))
-        {
-            sig.setVisibility(View.INVISIBLE);
-        }else{
+
+
+        if(!textInfo.getText().toString().matches("")){
+            Toast.makeText(this, "Memoria detectada!!", Toast.LENGTH_SHORT).show();
             sig.setVisibility(View.VISIBLE);
+        }else{
+            Toast.makeText(this, "Memoria no detectada", Toast.LENGTH_SHORT).show();
+            sig.setVisibility(View.INVISIBLE);
         }
+
     }
 
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
@@ -156,7 +164,9 @@ public class UsbDetected extends AppCompatActivity {
         startActivity(intent);
     }
     public void siguiente1(){
+
         Intent intent = new Intent(this, GeneratedPackage.class);
+
         startActivity(intent);
     }
     public void copyFile2(String rutaDestino, String archivoDestino) {
@@ -226,6 +236,7 @@ public class UsbDetected extends AppCompatActivity {
 
                 while ((len = in.read(buffer.array())) > 0) {
                     Toast.makeText(this, "COPIANDO...", Toast.LENGTH_SHORT).show();
+
                     mOutPut.write(buffer.array());//This the key Point
                 }
                 Toast.makeText(this, "ARCHIVO COPIADO", Toast.LENGTH_SHORT).show();

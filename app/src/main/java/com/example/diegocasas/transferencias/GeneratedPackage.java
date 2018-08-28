@@ -39,6 +39,9 @@ public class GeneratedPackage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generated_package);
 
+        Intent intent = getIntent();
+        final String ad = intent.getExtras().getString("archivo_destino");
+
         pkg = (TextView) findViewById(R.id.generatedPKG);
         out = (Button) findViewById(R.id.out);
 
@@ -49,7 +52,34 @@ public class GeneratedPackage extends AppCompatActivity {
                 pkg.setVisibility(View.VISIBLE);
             }
             public void onFinish() {
-                Toast.makeText(GeneratedPackage.this, "El proceso finalizó", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(GeneratedPackage.this, "El proceso finalizó", Toast.LENGTH_SHORT).show();
+
+                try {
+                    UsbMassStorageDevice[] devices = UsbMassStorageDevice.getMassStorageDevices(GeneratedPackage.this);
+
+                    for (UsbMassStorageDevice device : devices) {
+
+                        // before interacting with a device you need to call init()!
+                        device.init();
+                        FileSystem currentFs = device.getPartitions().get(0).getFileSystem();
+                        UsbFile root = currentFs.getRootDirectory();
+
+                        UsbFile file = root.search(ad);
+
+                        if (file.getLength() > 0 ){
+                            Toast.makeText(GeneratedPackage.this, "El archivo se copió en la memoria USB exitosamente", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(GeneratedPackage.this, "Hubo un error de copiado", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                    Toast.makeText(GeneratedPackage.this, e1.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                    Toast.makeText(GeneratedPackage.this, e1.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
                 pkg.setVisibility(View.INVISIBLE);
                 out.setVisibility(View.VISIBLE);
             }
@@ -61,7 +91,6 @@ public class GeneratedPackage extends AppCompatActivity {
                     if (launchIntent != null) {
                         startActivity(launchIntent);//null pointer check in case package name was not found
                     }
-
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("EXIT", true);
@@ -72,9 +101,5 @@ public class GeneratedPackage extends AppCompatActivity {
     /*****Deshabilitar back******/
     @Override
     public void onBackPressed() {
-
     }
-
 }
-
-

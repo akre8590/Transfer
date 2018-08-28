@@ -73,17 +73,17 @@ public class MainActivity extends AppCompatActivity {
         zip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CountDownTimer(15000, 1000) {
 
-                    public void onTick(long millisUntilFinished) {
-                        Toast.makeText(MainActivity.this, "Espere un momento...", Toast.LENGTH_SHORT).show();
-                    }
+                    new CountDownTimer(12000, 1000) {
 
-                    public void onFinish() {
-                        sendIntent();
-                        zipFile(rutaOrigen, archivoOrigen, rutaDestino, archivoDestino);
-                    }
-                }.start();
+                        public void onTick(long millisUntilFinished) {
+                            Toast.makeText(MainActivity.this, "Espere un momento...", Toast.LENGTH_SHORT).show();
+                        }
+                        public void onFinish() {
+                            sendIntent();
+                            zipFile(rutaOrigen, archivoOrigen, rutaDestino, archivoDestino);
+                        }
+                    }.start();
             }
         });
     }
