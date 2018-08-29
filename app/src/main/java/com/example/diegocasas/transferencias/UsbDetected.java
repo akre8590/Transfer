@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.support.v4.app.ActivityCompat;
@@ -20,6 +21,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.provider.DocumentFile;
+
+import com.fxn.cue.Cue;
+import com.fxn.cue.enums.Duration;
+import com.fxn.cue.enums.Type;
 import com.github.mjdev.libaums.UsbMassStorageDevice;
 import com.github.mjdev.libaums.fs.FileSystem;
 import com.github.mjdev.libaums.fs.UsbFile;
@@ -121,10 +126,12 @@ public class UsbDetected extends AppCompatActivity {
 
 
         if(!textInfo.getText().toString().matches("")){
-            Toast.makeText(this, "Memoria detectada!!", Toast.LENGTH_SHORT).show();
+            cueCorrect("Memoria detectada!!");
+            //Toast.makeText(this, "Memoria detectada!!", Toast.LENGTH_SHORT).show();
             sig.setVisibility(View.VISIBLE);
         }else{
-            Toast.makeText(this, "Memoria no detectada", Toast.LENGTH_SHORT).show();
+            cueError("Memoria no detectada...");
+            //Toast.makeText(this, "Memoria no detectada", Toast.LENGTH_SHORT).show();
             sig.setVisibility(View.INVISIBLE);
         }
 
@@ -182,7 +189,7 @@ public class UsbDetected extends AppCompatActivity {
                 UsbFile root = currentFs.getRootDirectory();
 
                 File fileSource = new File(rutaDestino + archivoDestino);
-                Toast.makeText(this, "Source: " + fileSource.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "Source: " + fileSource.getAbsolutePath(), Toast.LENGTH_SHORT).show();
 
                 InputStream in = new FileInputStream(fileSource);
                 ByteBuffer buffer = ByteBuffer.allocate(4096);
@@ -195,7 +202,8 @@ public class UsbDetected extends AppCompatActivity {
                 UsbFileOutputStream mOutPut = new UsbFileOutputStream(file);
 
                 while ((len = in.read(buffer.array())) > 0) {
-                    Toast.makeText(this, "COPIANDO...", Toast.LENGTH_SHORT).show();
+                    cueWarning("Copiando 1...");
+                    //Toast.makeText(this, "COPIANDO 1...", Toast.LENGTH_SHORT).show();
                     mOutPut.write(buffer.array());//This the key Point
                 }
                 in.close();
@@ -222,7 +230,7 @@ public class UsbDetected extends AppCompatActivity {
                 UsbFile root = currentFs.getRootDirectory();
 
                 File fileSource = new File("storage/emulated/0/AdmCensal/envios/datos_AdmCensal.zip");
-                Toast.makeText(this, "Source: " + fileSource.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Source: " + fileSource.getAbsolutePath(), Toast.LENGTH_SHORT).show();
 
                 InputStream in = new FileInputStream(fileSource);
                 ByteBuffer buffer = ByteBuffer.allocate(4096);
@@ -231,15 +239,17 @@ public class UsbDetected extends AppCompatActivity {
                 /*UsbFile AdmCensal = root.createDirectory("AdmCensal");
                 UsbFile envios = AdmCensal.createDirectory("Envios");*/
 
+
                 UsbFile file = root.createFile("datos_AdmCensal.zip");
                 UsbFileOutputStream mOutPut = new UsbFileOutputStream(file);
 
                 while ((len = in.read(buffer.array())) > 0) {
-                    Toast.makeText(this, "COPIANDO...", Toast.LENGTH_SHORT).show();
-
+                    cueWarning("Copiando 2...");
+                    //Toast.makeText(this, "COPIANDO 2...", Toast.LENGTH_SHORT).show();
                     mOutPut.write(buffer.array());//This the key Point
                 }
-                Toast.makeText(this, "ARCHIVO COPIADO", Toast.LENGTH_SHORT).show();
+                cueCorrect("Archivo copiado!!");
+                //Toast.makeText(this, "ARCHIVO COPIADO", Toast.LENGTH_SHORT).show();
                 in.close();
                 mOutPut.close();
             }
@@ -268,6 +278,56 @@ public class UsbDetected extends AppCompatActivity {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+    public void cueError(String msg){
+        Cue.init()
+                .with(UsbDetected.this)
+                .setMessage(msg)
+                .setGravity(Gravity.CENTER_VERTICAL)
+                .setType(Type.CUSTOM)
+                .setDuration(Duration.SHORT)
+                .setBorderWidth(5)
+                .setCornerRadius(10)
+                .setCustomFontColor(Color.parseColor("#FA5858"),
+                        Color.parseColor("#ffffff"),
+                        Color.parseColor("#e84393"))
+                .setPadding(30)
+                .setTextSize(25)
+                .show();
+    }
+
+    public void cueCorrect(String msg){
+        Cue.init()
+                .with(UsbDetected.this)
+                .setMessage(msg)
+                .setGravity(Gravity.CENTER_VERTICAL)
+                .setType(Type.CUSTOM)
+                .setDuration(Duration.SHORT)
+                .setBorderWidth(5)
+                .setCornerRadius(10)
+                .setCustomFontColor(Color.parseColor("#088A85"), //fondo
+                        Color.parseColor("#ffffff"), //letra
+                        Color.parseColor("#01DFD7")) //contorno
+                .setPadding(30)
+                .setTextSize(25)
+                .show();
+    }
+
+    public void cueWarning(String msg){
+        Cue.init()
+                .with(UsbDetected.this)
+                .setMessage(msg)
+                .setGravity(Gravity.CENTER_VERTICAL)
+                .setType(Type.CUSTOM)
+                .setDuration(Duration.SHORT)
+                .setBorderWidth(5)
+                .setCornerRadius(10)
+                .setCustomFontColor(Color.parseColor("#0080FF"), //fondo
+                        Color.parseColor("#ffffff"), //letra
+                        Color.parseColor("#00BFFF")) //contorno
+                .setPadding(30)
+                .setTextSize(25)
+                .show();
     }
 }
 

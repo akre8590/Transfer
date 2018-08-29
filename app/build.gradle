@@ -28,4 +28,5 @@ dependencies {
     implementation 'com.github.ghost1372:Mzip-Android:0.4.0'
     implementation 'com.github.mjdev:libaums:0.5.5'
     implementation 'com.github.onurkagan:ktoast:1.0.2'
+    implementation 'com.fxn769:cue:1.1'
 }

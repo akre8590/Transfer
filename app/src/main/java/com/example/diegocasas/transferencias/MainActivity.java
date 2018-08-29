@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v4.app.ActivityCompat;
@@ -12,11 +13,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.fxn.cue.Cue;
+import com.fxn.cue.enums.Duration;
+import com.fxn.cue.enums.Type;
 
 import java.io.File;
 import java.io.InputStream;
@@ -44,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_STORAGE = INITIAL_REQUEST + 4;
     String rutaOrigen, rutaDestino, archivoOrigen, archivoDestino;
     TextView inte;
-    Button zip;
+    Button zip, rec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +73,15 @@ public class MainActivity extends AppCompatActivity {
         archivoDestino = getIntent().getStringExtra("archivoDestino"); //nombre del zip
 
         zip = (Button) findViewById(R.id.sendZip);
+        rec = (Button) findViewById(R.id.received);
         inte = (TextView) findViewById(R.id.intent);
 
+        rec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recibir();
+            }
+        });
 
         zip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +90,10 @@ public class MainActivity extends AppCompatActivity {
                     new CountDownTimer(12000, 1000) {
 
                         public void onTick(long millisUntilFinished) {
-                            Toast.makeText(MainActivity.this, "Espere un momento...", Toast.LENGTH_SHORT).show();
+                            rec.setVisibility(View.INVISIBLE);
+                            zip.setVisibility(View.INVISIBLE);
+                            cueWarning("Espere un momento...");
+                            //Toast.makeText(MainActivity.this, "Espere un momento...", Toast.LENGTH_SHORT).show();
                         }
                         public void onFinish() {
                             sendIntent();
@@ -101,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);*/
     }
 
-    public void recibir(View view){
+    public void recibir(){
 
         /*Intent i = new Intent(this, UsbDetected2.class);
         i.putExtra("r_origen", rutaOrigen);
@@ -148,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("DELETE", rutaOrigen + nombreDB);
             }
         }
-        Toast.makeText(MainActivity.this, "Listo!!", Toast.LENGTH_SHORT).show();
+        cueCorrect("Listo!!!");
+        //Toast.makeText(MainActivity.this, "Listo!!", Toast.LENGTH_SHORT).show();
     }
 
     /*****Deshabilitar back******/
@@ -194,5 +211,39 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+    public void cueCorrect(String msg){
+        Cue.init()
+                .with(MainActivity.this)
+                .setMessage(msg)
+                .setGravity(Gravity.CENTER_VERTICAL)
+                .setType(Type.CUSTOM)
+                .setDuration(Duration.SHORT)
+                .setBorderWidth(5)
+                .setCornerRadius(10)
+                .setCustomFontColor(Color.parseColor("#088A85"), //fondo
+                        Color.parseColor("#ffffff"), //letra
+                        Color.parseColor("#01DFD7")) //contorno
+                .setPadding(30)
+                .setTextSize(25)
+                .show();
+    }
+
+    public void cueWarning(String msg){
+        Cue.init()
+                .with(MainActivity.this)
+                .setMessage(msg)
+                .setGravity(Gravity.CENTER_VERTICAL)
+                .setType(Type.CUSTOM)
+                .setDuration(Duration.SHORT)
+                .setBorderWidth(5)
+                .setCornerRadius(10)
+                .setCustomFontColor(Color.parseColor("#0080FF"), //fondo
+                        Color.parseColor("#ffffff"), //letra
+                        Color.parseColor("#00BFFF")) //contorno
+                .setPadding(30)
+                .setTextSize(25)
+                .show();
     }
 }

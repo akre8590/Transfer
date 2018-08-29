@@ -21,6 +21,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fxn.cue.Cue;
+import com.fxn.cue.enums.Duration;
+import com.fxn.cue.enums.Type;
 import com.github.mjdev.libaums.UsbMassStorageDevice;
 import com.github.mjdev.libaums.fs.FileSystem;
 import com.github.mjdev.libaums.fs.UsbFile;
@@ -55,7 +58,6 @@ public class UsbDetected2 extends AppCompatActivity {
     Button det2, sig2;
 
     private static final String ACTION_USB_PERMISSION = "com.example.diegocasas.transferencias";
-
     private static final String[] INITIAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS,
@@ -66,13 +68,11 @@ public class UsbDetected2 extends AppCompatActivity {
     private static final int INITIAL_REQUEST = 1337;
     private static final int REQUEST_WRITE_STORAGE = INITIAL_REQUEST + 4;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usb_detected2);
         verifyStoragePermissions(UsbDetected2.this);
-
 
         det2 = (Button) findViewById(R.id.detec2);
         sig2 = (Button) findViewById(R.id.sig2);
@@ -118,14 +118,15 @@ public class UsbDetected2 extends AppCompatActivity {
         }
         textInfo.setText(i);
         if(!textInfo.getText().toString().matches("")){
-            Toast.makeText(this, "Memoria detectada!!", Toast.LENGTH_SHORT).show();
+            cueCorrect("Memoria detectada!!!");
+            //Toast.makeText(this, "Memoria detectada!!", Toast.LENGTH_SHORT).show();
             sig2.setVisibility(View.VISIBLE);
         }else{
-            Toast.makeText(this, "Memoria no detectada...", Toast.LENGTH_SHORT).show();
+            cueError("Memoria no detectada...");
+            //Toast.makeText(this, "Memoria no detectada...", Toast.LENGTH_SHORT).show();
             sig2.setVisibility(View.INVISIBLE);
         }
     }
-
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -185,8 +186,8 @@ public class UsbDetected2 extends AppCompatActivity {
                     while ((count = is.read(bytes)) != -1) {
                         out.write(bytes, 0, count);
                         total += count;
-                        Toast.makeText(this, "Copiando...", Toast.LENGTH_SHORT).show();
-
+                        cueWarning("Copiando...");
+                        //Toast.makeText(this, "Copiando...", Toast.LENGTH_SHORT).show();
                     }
                     out.close();
                     is.close();
@@ -201,10 +202,12 @@ public class UsbDetected2 extends AppCompatActivity {
                             Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
                         }
                     }
-                    Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
+                    cueCorrect("El proceso finalizó");
+                    //Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    Toast.makeText(this, "No existe archivo en la memoria...", Toast.LENGTH_SHORT).show();
+                    cueError("No se encontró el archivo en la memoria...");
+                    //Toast.makeText(this, "No se encontró el archivo en la memoria...", Toast.LENGTH_SHORT).show();
                 }
 
                 //UsbFile[] files = root.listFiles();
@@ -240,7 +243,6 @@ public class UsbDetected2 extends AppCompatActivity {
             e1.printStackTrace();
             Toast.makeText(this, e1.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
     }
     /*****Deshabilitar back******/
     @Override
@@ -260,4 +262,53 @@ public class UsbDetected2 extends AppCompatActivity {
         }
     }
 
+    public void cueError(String msg){
+        Cue.init()
+                .with(UsbDetected2.this)
+                .setMessage(msg)
+                .setGravity(Gravity.CENTER_VERTICAL)
+                .setType(Type.CUSTOM)
+                .setDuration(Duration.SHORT)
+                .setBorderWidth(5)
+                .setCornerRadius(10)
+                .setCustomFontColor(Color.parseColor("#FA5858"),
+                        Color.parseColor("#ffffff"),
+                        Color.parseColor("#e84393"))
+                .setPadding(30)
+                .setTextSize(25)
+                .show();
+    }
+
+    public void cueCorrect(String msg){
+        Cue.init()
+                .with(UsbDetected2.this)
+                .setMessage(msg)
+                .setGravity(Gravity.CENTER_VERTICAL)
+                .setType(Type.CUSTOM)
+                .setDuration(Duration.SHORT)
+                .setBorderWidth(5)
+                .setCornerRadius(10)
+                .setCustomFontColor(Color.parseColor("#088A85"), //fondo
+                        Color.parseColor("#ffffff"), //letra
+                        Color.parseColor("#01DFD7")) //contorno
+                .setPadding(30)
+                .setTextSize(25)
+                .show();
+    }
+    public void cueWarning(String msg){
+        Cue.init()
+                .with(UsbDetected2.this)
+                .setMessage(msg)
+                .setGravity(Gravity.CENTER_VERTICAL)
+                .setType(Type.CUSTOM)
+                .setDuration(Duration.SHORT)
+                .setBorderWidth(5)
+                .setCornerRadius(10)
+                .setCustomFontColor(Color.parseColor("#0080FF"), //fondo
+                        Color.parseColor("#ffffff"), //letra
+                        Color.parseColor("#00BFFF")) //contorno
+                .setPadding(30)
+                .setTextSize(25)
+                .show();
+    }
 }
