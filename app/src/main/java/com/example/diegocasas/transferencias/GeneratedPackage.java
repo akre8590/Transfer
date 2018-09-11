@@ -72,7 +72,7 @@ public class GeneratedPackage extends AppCompatActivity {
                         UsbFile file = root.search(ad);
 
                         if (file.getLength() > 0 ){
-                            cueCorrect("El archivo se copio en la memoria USB exitosamente");
+                            cueCorrect("El archivo se copió en la memoria USB exitosamente");
                             //Toast.makeText(GeneratedPackage.this, "El archivo se copió en la memoria USB exitosamente", Toast.LENGTH_SHORT).show();
                         } else {
                             cueError("Hubo un error de copiado en la memoria");

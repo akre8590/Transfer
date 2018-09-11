@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
             }
         }
-
         rutaOrigen = getIntent().getStringExtra("rutaOrigen"); // ruta del archivo que se va a zipear
         archivoOrigen = getIntent().getStringExtra("archivoOrigen"); //  archivo que se va a zipear
         rutaDestino = getIntent().getStringExtra("rutaDestino"); // ruta donde se zipea
@@ -111,32 +110,26 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("r_destino", rutaDestino);
         i.putExtra("a_destino", archivoDestino);
         startActivity(i);
-
         //zipFile(rutaOrigen, archivoOrigen, rutaDestino, archivoDestino);
         /*Intent intent = new Intent(this, UsbDetected.class);
         startActivity(intent);*/
     }
-
     public void recibir(){
-
         /*Intent i = new Intent(this, UsbDetected2.class);
         i.putExtra("r_origen", rutaOrigen);
         i.putExtra("a_origen", archivoOrigen);
         i.putExtra("r_destino", rutaDestino);
         i.putExtra("a_destino", archivoDestino);
         startActivity(i);*/
-
         Intent intent = new Intent(this, UsbDetected2.class);
         startActivity(intent);
     }
-
     public void cancel(View view){
         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.addCategory( Intent.CATEGORY_HOME );
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
     }
-
     public void zipFile(String rutaOrigen, String nombreDB, String rutaDestino, String nombreZip){
         ZipArchive zipArchive1 = new ZipArchive();
         //zipArchive.zip(rutaOrigen + nombreDB, rutaDestino + nombreZip, "123456");
@@ -146,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         zipArchive2.zip(rutaOrigen + nombreZip, rutaDestino + nombreZip, "CONTA22015");
 
         ZipArchive zipArchive3 = new ZipArchive();
-        zipArchive3.zip(rutaOrigen + nombreDB, "storage/emulated/0/AdmCensal/envios/datos_AdmCensal.zip", "123456");
+        zipArchive3.zip(rutaOrigen + nombreDB, "storage/emulated/0/AdmCensal/envios/datos_AdmCensal.zip", "");
 
         File fdelete = new File(rutaOrigen + nombreZip);
         if (fdelete.exists()) {
@@ -167,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
         cueCorrect("Listo!!!");
         //Toast.makeText(MainActivity.this, "Listo!!", Toast.LENGTH_SHORT).show();
     }
-
     /*****Deshabilitar back******/
     @Override
     public void onBackPressed() {
@@ -212,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
             );
         }
     }
-
     public void cueCorrect(String msg){
         Cue.init()
                 .with(MainActivity.this)
@@ -229,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
                 .setTextSize(25)
                 .show();
     }
-
     public void cueWarning(String msg){
         Cue.init()
                 .with(MainActivity.this)

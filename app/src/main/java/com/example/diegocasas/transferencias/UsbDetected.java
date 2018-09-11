@@ -91,6 +91,11 @@ public class UsbDetected extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(UsbDetected.this, GeneratedPackage.class);
+
+                /**i.setType("text/pas");
+                i.setAction(Intent.ACTION_VIEW);
+                i.putExtra(Intent.EXTRA_TEXT, archivo_destino);*/
+
                 i.putExtra("archivo_destino", archivo_destino);
                 startActivity(i);
                 //siguiente1();
@@ -202,7 +207,7 @@ public class UsbDetected extends AppCompatActivity {
                 UsbFileOutputStream mOutPut = new UsbFileOutputStream(file);
 
                 while ((len = in.read(buffer.array())) > 0) {
-                    cueWarning("Copiando 1...");
+                    cueWarning("Generando...");
                     //Toast.makeText(this, "COPIANDO 1...", Toast.LENGTH_SHORT).show();
                     mOutPut.write(buffer.array());//This the key Point
                 }
@@ -218,7 +223,6 @@ public class UsbDetected extends AppCompatActivity {
         }
     }
     public void copyFile3() {
-
         try {
             UsbMassStorageDevice[] devices = UsbMassStorageDevice.getMassStorageDevices(UsbDetected.this);
 
@@ -235,16 +239,14 @@ public class UsbDetected extends AppCompatActivity {
                 InputStream in = new FileInputStream(fileSource);
                 ByteBuffer buffer = ByteBuffer.allocate(4096);
                 int len;
-
                 /*UsbFile AdmCensal = root.createDirectory("AdmCensal");
                 UsbFile envios = AdmCensal.createDirectory("Envios");*/
-
 
                 UsbFile file = root.createFile("datos_AdmCensal.zip");
                 UsbFileOutputStream mOutPut = new UsbFileOutputStream(file);
 
                 while ((len = in.read(buffer.array())) > 0) {
-                    cueWarning("Copiando 2...");
+                    cueWarning("Copiando....");
                     //Toast.makeText(this, "COPIANDO 2...", Toast.LENGTH_SHORT).show();
                     mOutPut.write(buffer.array());//This the key Point
                 }
@@ -261,6 +263,7 @@ public class UsbDetected extends AppCompatActivity {
             Toast.makeText(this, e1.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
     /*****Deshabilitar back******/
     @Override
     public void onBackPressed() {

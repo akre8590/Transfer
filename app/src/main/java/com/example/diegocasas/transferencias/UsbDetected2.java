@@ -88,14 +88,11 @@ public class UsbDetected2 extends AppCompatActivity {
             public void onClick(View v) {
                 copyFile3();
                 sigui();
-
             }
         });
-
         textInfo = (TextView) findViewById(R.id.info2);
     }
     public void detecte(){
-
         manager = (UsbManager) getSystemService(Context.USB_SERVICE);
         /*
          * this block required if you need to communicate to USB devices it's
@@ -154,7 +151,6 @@ public class UsbDetected2 extends AppCompatActivity {
             }
         }
     };
-
     public void cancel3(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -164,9 +160,13 @@ public class UsbDetected2 extends AppCompatActivity {
         startActivity(intent);
     }
     public void copyFile3()  {
+
         File to = new File("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
+
         try {
+
             UsbMassStorageDevice[] devices = UsbMassStorageDevice.getMassStorageDevices(UsbDetected2.this);
+
             for (UsbMassStorageDevice device : devices) {
                 // before interacting with a device you need to call init()!
                 device.init();
@@ -176,43 +176,39 @@ public class UsbDetected2 extends AppCompatActivity {
                 //UsbFile file = root.createFile("opera.txt");
                 UsbFile file = root.search("datos_AdmCensal.zip");
 
-                if (file.getLength() > 0){
-                    InputStream is = new UsbFileInputStream(file);
-                    OutputStream out = new BufferedOutputStream(new FileOutputStream(to));
-                    byte[] bytes = new byte[currentFs.getChunkSize()];
-                    int count;
-                    long total = 0;
-
-                    while ((count = is.read(bytes)) != -1) {
-                        out.write(bytes, 0, count);
-                        total += count;
-                        cueWarning("Copiando...");
-                        //Toast.makeText(this, "Copiando...", Toast.LENGTH_SHORT).show();
-                    }
-                    out.close();
-                    is.close();
-                    file.delete();
-                    ZipArchive zipArchive = new ZipArchive();
-                    zipArchive.unzip("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip","/storage/emulated/0/AdmCensal/recepciones/","123456");
-                    File fdelete2 = new File("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
-                    if (fdelete2.exists()) {
-                        if (fdelete2.delete()) {
-                            Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
-                        } else {
-                            Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
-                        }
-                    }
-                    cueCorrect("El proceso finalizó");
-                    //Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    cueError("No se encontró el archivo en la memoria...");
-                    //Toast.makeText(this, "No se encontró el archivo en la memoria...", Toast.LENGTH_SHORT).show();
-                }
-
                 //UsbFile[] files = root.listFiles();
                 //for(UsbFile file: files) {
 
+                InputStream is = new UsbFileInputStream(file);
+                OutputStream out = new BufferedOutputStream(new FileOutputStream(to));
+                byte[] bytes = new byte[currentFs.getChunkSize()];
+                int count;
+                long total = 0;
+
+                while ((count = is.read(bytes)) != -1) {
+                    out.write(bytes, 0, count);
+                    total += count;
+                    cueWarning("Copiando...");
+                    //Toast.makeText(this, "Copiando...", Toast.LENGTH_SHORT).show();
+
+                }
+                out.close();
+                is.close();
+                file.delete();
+
+                ZipArchive zipArchive = new ZipArchive();
+               zipArchive.unzip("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip", "/storage/emulated/0/AdmCensal/recepciones/","");
+
+                File fdelete2 = new File("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
+                if (fdelete2.exists()) {
+                    if (fdelete2.delete()) {
+                        Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
+                    } else {
+                        Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
+                    }
+                }
+                cueCorrect("El proceso finalizó");
+                //Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
 
                 //}
 
@@ -235,7 +231,6 @@ public class UsbDetected2 extends AppCompatActivity {
                     Toast.makeText(this, "Copy file failed", Toast.LENGTH_SHORT).show();
                 }*/
             }
-
         } catch(FileNotFoundException e1){
             e1.printStackTrace();
             Toast.makeText(this, e1.getMessage(), Toast.LENGTH_SHORT).show();
@@ -243,6 +238,7 @@ public class UsbDetected2 extends AppCompatActivity {
             e1.printStackTrace();
             Toast.makeText(this, e1.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
     }
     /*****Deshabilitar back******/
     @Override
@@ -261,7 +257,6 @@ public class UsbDetected2 extends AppCompatActivity {
             );
         }
     }
-
     public void cueError(String msg){
         Cue.init()
                 .with(UsbDetected2.this)
@@ -278,7 +273,6 @@ public class UsbDetected2 extends AppCompatActivity {
                 .setTextSize(25)
                 .show();
     }
-
     public void cueCorrect(String msg){
         Cue.init()
                 .with(UsbDetected2.this)

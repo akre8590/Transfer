@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.MANAGE_USB" />
@@ -21,6 +22,7 @@
         tools:node="replace">
 
         <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,16 +30,22 @@
             </intent-filter>
 
             <intent-filter>
+
                 <action android:name="com.example.diegocasas.transferencias" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
         </activity>
-        <activity android:name=".UsbDetected">
+        <activity android:name=".UsbDetected"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".UsbDetected2" />
-        <activity android:name=".GeneratedPackage" />
-        <activity android:name=".ReceivedPackage"></activity>
+        <activity android:name=".UsbDetected2"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".GeneratedPackage"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ReceivedPackage"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
