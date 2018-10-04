@@ -131,7 +131,7 @@ public class UsbDetected extends AppCompatActivity {
 
 
         if(!textInfo.getText().toString().matches("")){
-            cueCorrect("Memoria detectada!!");
+            cueCorrect("Memoria detectada. Presione el botón siguiente.");
             //Toast.makeText(this, "Memoria detectada!!", Toast.LENGTH_SHORT).show();
             sig.setVisibility(View.VISIBLE);
         }else{
@@ -207,7 +207,7 @@ public class UsbDetected extends AppCompatActivity {
                 UsbFileOutputStream mOutPut = new UsbFileOutputStream(file);
 
                 while ((len = in.read(buffer.array())) > 0) {
-                    cueWarning("Generando...");
+                    cueWarning("Generando...puede tardar algunos minutos");
                     //Toast.makeText(this, "COPIANDO 1...", Toast.LENGTH_SHORT).show();
                     mOutPut.write(buffer.array());//This the key Point
                 }
@@ -246,7 +246,7 @@ public class UsbDetected extends AppCompatActivity {
                 UsbFileOutputStream mOutPut = new UsbFileOutputStream(file);
 
                 while ((len = in.read(buffer.array())) > 0) {
-                    cueWarning("Copiando....");
+                    cueWarning("Copiando...puede tardar algunos minutos");
                     //Toast.makeText(this, "COPIANDO 2...", Toast.LENGTH_SHORT).show();
                     mOutPut.write(buffer.array());//This the key Point
                 }

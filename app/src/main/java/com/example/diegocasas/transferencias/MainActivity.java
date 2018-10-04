@@ -27,6 +27,7 @@ import com.fxn.cue.enums.Type;
 import java.io.File;
 import java.io.InputStream;
 import java.util.logging.Handler;
+import java.util.zip.ZipInputStream;
 
 import ir.mahdi.mzip.zip.ZipArchive;
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int INITIAL_REQUEST = 1337;
     private static final int REQUEST_WRITE_STORAGE = INITIAL_REQUEST + 4;
-    String rutaOrigen, rutaDestino, archivoOrigen, archivoDestino;
+    String rutaOrigen, rutaDestino, archivoOrigen, archivoDestino, sup_ent;
     TextView inte;
     Button zip, rec;
 
@@ -70,10 +71,22 @@ public class MainActivity extends AppCompatActivity {
         archivoOrigen = getIntent().getStringExtra("archivoOrigen"); //  archivo que se va a zipear
         rutaDestino = getIntent().getStringExtra("rutaDestino"); // ruta donde se zipea
         archivoDestino = getIntent().getStringExtra("archivoDestino"); //nombre del zip
+        sup_ent = getIntent().getStringExtra("tipofigura");
 
         zip = (Button) findViewById(R.id.sendZip);
         rec = (Button) findViewById(R.id.received);
         inte = (TextView) findViewById(R.id.intent);
+
+        if (sup_ent.equals("E")){
+            zip.setVisibility(View.VISIBLE);
+            zip.setText("ENVIAR A SUPERVISOR");
+            rec.setVisibility(View.INVISIBLE);
+        } else if (sup_ent.equals("S")){
+            zip.setVisibility(View.VISIBLE);
+            rec.setVisibility(View.VISIBLE);
+        } else {
+            cueWarning("No se recibieron parámetros");
+        }
 
         rec.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,10 +138,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void cancel(View view){
-        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        finish();
+        System.exit(0);
+
+        /**Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.addCategory( Intent.CATEGORY_HOME );
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(homeIntent);
+        startActivity(homeIntent);**/
     }
     public void zipFile(String rutaOrigen, String nombreDB, String rutaDestino, String nombreZip){
         ZipArchive zipArchive1 = new ZipArchive();
@@ -157,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("DELETE", rutaOrigen + nombreDB);
             }
         }
-        cueCorrect("Listo!!!");
+        cueCorrect("Conecte una memoria USB!!!");
         //Toast.makeText(MainActivity.this, "Listo!!", Toast.LENGTH_SHORT).show();
     }
     /*****Deshabilitar back******/

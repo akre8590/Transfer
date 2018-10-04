@@ -47,14 +47,22 @@ public class ReceivedPackage extends AppCompatActivity {
         out2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.embarcadero.AdmCensal");
+                Intent intent = new Intent("com.embarcadero.AdmCensal");
+                intent.setType("text/pas");
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.putExtra("test","Esto es una prueba");
+                startActivity(intent);
+                finish();
+                System.exit(0);
+
+                /**Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.embarcadero.AdmCensal");
                 if (launchIntent != null) {
                     startActivity(launchIntent);//null pointer check in case package name was not found
                 }
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("EXIT", true);
-                startActivity(intent);
+                startActivity(intent);**/
             }
         });
     }

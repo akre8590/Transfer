@@ -115,7 +115,7 @@ public class UsbDetected2 extends AppCompatActivity {
         }
         textInfo.setText(i);
         if(!textInfo.getText().toString().matches("")){
-            cueCorrect("Memoria detectada!!!");
+            cueCorrect("Memoria detectada. Presione el botón siguiente.");
             //Toast.makeText(this, "Memoria detectada!!", Toast.LENGTH_SHORT).show();
             sig2.setVisibility(View.VISIBLE);
         }else{
@@ -188,7 +188,7 @@ public class UsbDetected2 extends AppCompatActivity {
                 while ((count = is.read(bytes)) != -1) {
                     out.write(bytes, 0, count);
                     total += count;
-                    cueWarning("Copiando...");
+                    cueWarning("Copiando...puede tardar unos minutos");
                     //Toast.makeText(this, "Copiando...", Toast.LENGTH_SHORT).show();
 
                 }
@@ -197,16 +197,16 @@ public class UsbDetected2 extends AppCompatActivity {
                 file.delete();
 
                 ZipArchive zipArchive = new ZipArchive();
-               zipArchive.unzip("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip", "/storage/emulated/0/AdmCensal/recepciones/","");
+                zipArchive.unzip("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip", "/storage/emulated/0/AdmCensal/recepciones/","");
 
-                File fdelete2 = new File("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
+                /**File fdelete2 = new File("/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
                 if (fdelete2.exists()) {
                     if (fdelete2.delete()) {
                         Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
                     } else {
                         Log.d("DELETE", "/storage/emulated/0/AdmCensal/recepciones/datos_AdmCensal.zip");
                     }
-                }
+                }**/
                 cueCorrect("El proceso finalizó");
                 //Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
 
