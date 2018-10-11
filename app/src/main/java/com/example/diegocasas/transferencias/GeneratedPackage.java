@@ -58,7 +58,6 @@ public class GeneratedPackage extends AppCompatActivity {
             }
             public void onFinish() {
                 //Toast.makeText(GeneratedPackage.this, "El proceso finalizó", Toast.LENGTH_SHORT).show();
-
                 try {
                     UsbMassStorageDevice[] devices = UsbMassStorageDevice.getMassStorageDevices(GeneratedPackage.this);
 

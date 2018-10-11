@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         rutaDestino = getIntent().getStringExtra("rutaDestino"); // ruta donde se zipea
         archivoDestino = getIntent().getStringExtra("archivoDestino"); //nombre del zip
         sup_ent = getIntent().getStringExtra("tipofigura");
+        deleteAdmCensal();
 
         zip = (Button) findViewById(R.id.sendZip);
         rec = (Button) findViewById(R.id.received);
@@ -115,6 +116,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void deleteAdmCensal(){
+        File datosAC = new File("storage/emulated/0/AdmCensal/envios/datos_AdmCensal.zip");
+        if (datosAC.exists()) {
+            if (datosAC.delete()) {
+                Log.d("DELETE", "Archivo se ha borrado");
+            } else {
+                Log.d("DELETE", "No se pudo borrar el archivo");
+            }
+        }
+
+    }
     public void sendIntent() {
 
         Intent i = new Intent(this, UsbDetected.class);
@@ -128,12 +140,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);*/
     }
     public void recibir(){
-        /*Intent i = new Intent(this, UsbDetected2.class);
+        /**Intent i = new Intent(this, UsbDetected2.class);
         i.putExtra("r_origen", rutaOrigen);
         i.putExtra("a_origen", archivoOrigen);
         i.putExtra("r_destino", rutaDestino);
         i.putExtra("a_destino", archivoDestino);
-        startActivity(i);*/
+        startActivity(i);**/
         Intent intent = new Intent(this, UsbDetected2.class);
         startActivity(intent);
     }
