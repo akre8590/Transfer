@@ -67,38 +67,39 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
             }
         }
-        rutaOrigen = getIntent().getStringExtra("rutaOrigen"); // ruta del archivo que se va a zipear
-        archivoOrigen = getIntent().getStringExtra("archivoOrigen"); //  archivo que se va a zipear
-        rutaDestino = getIntent().getStringExtra("rutaDestino"); // ruta donde se zipea
-        archivoDestino = getIntent().getStringExtra("archivoDestino"); //nombre del zip
-        sup_ent = getIntent().getStringExtra("tipofigura");
-        deleteAdmCensal();
+        if (getIntent().getStringExtra("rutaOrigen") != null && getIntent().getStringExtra("archivoOrigen") != null && getIntent().getStringExtra("rutaDestino") != null && getIntent().getStringExtra("archivoDestino") != null && getIntent().getStringExtra("tipofigura") != null){
+            rutaOrigen = getIntent().getStringExtra("rutaOrigen"); // ruta del archivo que se va a zipear
+            archivoOrigen = getIntent().getStringExtra("archivoOrigen"); //  archivo que se va a zipear
+            rutaDestino = getIntent().getStringExtra("rutaDestino"); // ruta donde se zipea
+            archivoDestino = getIntent().getStringExtra("archivoDestino"); //nombre del zip
+            sup_ent = getIntent().getStringExtra("tipofigura");
+            deleteAdmCensal();
 
-        zip = (Button) findViewById(R.id.sendZip);
-        rec = (Button) findViewById(R.id.received);
-        inte = (TextView) findViewById(R.id.intent);
+            zip = (Button) findViewById(R.id.sendZip);
+            rec = (Button) findViewById(R.id.received);
+            inte = (TextView) findViewById(R.id.intent);
 
-        if (sup_ent.equals("E")){
-            zip.setVisibility(View.VISIBLE);
-            zip.setText("ENVIAR A SUPERVISOR");
-            rec.setVisibility(View.INVISIBLE);
-        } else if (sup_ent.equals("S")){
-            zip.setVisibility(View.VISIBLE);
-            rec.setVisibility(View.VISIBLE);
-        } else {
-            cueWarning("No se recibieron parámetros");
-        }
-
-        rec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recibir();
+            if (sup_ent.equals("E")){
+                zip.setVisibility(View.VISIBLE);
+                zip.setText("ENVIAR A SUPERVISOR");
+                rec.setVisibility(View.INVISIBLE);
+            } else if (sup_ent.equals("S")){
+                zip.setVisibility(View.VISIBLE);
+                rec.setVisibility(View.VISIBLE);
+            } else {
+                cueWarning("No se recibieron parámetros");
             }
-        });
 
-        zip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            rec.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recibir();
+                }
+            });
+
+            zip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
                     new CountDownTimer(12000, 1000) {
 
@@ -113,8 +114,12 @@ public class MainActivity extends AppCompatActivity {
                             zipFile(rutaOrigen, archivoOrigen, rutaDestino, archivoDestino);
                         }
                     }.start();
-            }
-        });
+                }
+            });
+        } else {
+            cueWarning("Sin parámetros");
+        }
+
     }
     public void deleteAdmCensal(){
         File datosAC = new File("storage/emulated/0/AdmCensal/envios/datos_AdmCensal.zip");

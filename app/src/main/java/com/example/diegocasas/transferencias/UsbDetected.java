@@ -2,7 +2,9 @@ package com.example.diegocasas.transferencias;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +13,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,12 +36,16 @@ import com.github.mjdev.libaums.fs.UsbFileOutputStream;
 import com.github.mjdev.libaums.fs.UsbFileStreamFactory;
 import com.onurkaganaldemir.ktoastlib.KToast;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -75,38 +83,43 @@ public class UsbDetected extends AppCompatActivity {
         verifyStoragePermissions(UsbDetected.this);
 
         Intent intent = getIntent();
-         final String ruta_destino = intent.getExtras().getString("r_destino");
-         final String archivo_destino = intent.getExtras().getString("a_destino");
+        if (intent.getExtras().getString("r_destino") != null && intent.getExtras().getString("a_destino") != null){
+            final String ruta_destino = intent.getExtras().getString("r_destino");
+            final String archivo_destino = intent.getExtras().getString("a_destino");
 
-        det = (Button)findViewById(R.id.detected);
-        sig = (Button)findViewById(R.id.next);
+            det = (Button)findViewById(R.id.detected);
+            sig = (Button)findViewById(R.id.next);
 
-        det.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                check();
-            }
-        });
-        sig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(UsbDetected.this, GeneratedPackage.class);
+            det.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    check();
+                }
+            });
+            sig.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(UsbDetected.this, GeneratedPackage.class);
 
-                /**i.setType("text/pas");
-                i.setAction(Intent.ACTION_VIEW);
-                i.putExtra(Intent.EXTRA_TEXT, archivo_destino);*/
+                    /**i.setType("text/pas");
+                     i.setAction(Intent.ACTION_VIEW);
+                     i.putExtra(Intent.EXTRA_TEXT, archivo_destino);*/
 
-                i.putExtra("archivo_destino", archivo_destino);
-                startActivity(i);
-                //siguiente1();
-                copyFile2(ruta_destino, archivo_destino);
-                copyFile3();
-            }
-        });
-        textInfo = (TextView) findViewById(R.id.info);
+                    i.putExtra("archivo_destino", archivo_destino);
+                    startActivity(i);
+                    //siguiente1();
+                    copyFile2(ruta_destino, archivo_destino);
+                    copyFile3();
+
+                }
+            });
+            textInfo = (TextView) findViewById(R.id.info);
+        } else {
+            cueError("No se recibieron los parámetros");
+        }
+
     }
     public void check(){
-
         manager = (UsbManager) getSystemService(Context.USB_SERVICE);
         /*
          * this block required if you need to communicate to USB devices it's
